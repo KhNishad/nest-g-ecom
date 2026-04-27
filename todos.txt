@@ -1,0 +1,9 @@
+
+Running :                                                  Finished :
+
+1 User Authentication & Account Management      
+• User registration (mobile/email)
+• Login (credentials + Google login)
+• Password recovery
+• Profile management
+• Session persistence (“Remember me”) 
