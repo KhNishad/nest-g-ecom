@@ -1,10 +1,11 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Request } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
     CreateUserDto
 
 } from './dto/userCreate.dto';
-
+import { AuthGuard } from '@nestjs/passport';
+import { UseGuards } from '@nestjs/common';
 
 @Controller('users')
 export class UsersController {
@@ -15,8 +16,17 @@ export class UsersController {
         return this.userService.userRegister(body);
     }
 
-    @Get('/user-list')
-    getUserList (){
-        return 'i am the list'
+    @Get('view/:id')
+    viewSingleUser(@Param('id') id: string) {
+        return this.userService.getSingleUser(id)
     }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get('profile')
+    viewProfile(@Request() req) {
+        return this.userService.getProfile(req.user.id)
+    }
+
+
+
 }
