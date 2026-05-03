@@ -8,6 +8,7 @@ import { UserSchema ,User } from 'src/users/schemas/userSchema';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Otp, OtpSchema } from 'src/auth/schemas/otpSchema';
 
 @Module({
   controllers: [CustomersController],
@@ -19,6 +20,6 @@ import { ConfigService } from '@nestjs/config';
           secret: config.get('JWT_SECRET'),
           signOptions: { expiresIn: '7d' },
         }),
-      }),MongooseModule.forFeature([{name : Customer.name, schema: CustomerSchema},{name : User.name ,schema :UserSchema}])]
+      }),MongooseModule.forFeature([{name : Customer.name, schema: CustomerSchema},{name : User.name ,schema :UserSchema},{name : Otp.name, schema : OtpSchema}])]
 })
 export class CustomersModule {}

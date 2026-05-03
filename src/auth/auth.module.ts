@@ -9,6 +9,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { User, UserSchema } from '../users/schemas/userSchema';
 import { ConfigService } from '@nestjs/config';
 import { CustomerSchema, Customer } from 'src/customers/schemas/customerSchema';
+import { OtpSchema,Otp } from './schemas/otpSchema';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { CustomerSchema, Customer } from 'src/customers/schemas/customerSchema';
         signOptions: { expiresIn: '7d' },
       }),
     }),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema },{ name: Customer.name, schema: CustomerSchema }]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema },{ name: Customer.name, schema: CustomerSchema },{ name: Otp.name, schema: OtpSchema }]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

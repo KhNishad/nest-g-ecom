@@ -17,7 +17,7 @@ export class CustomersService {
 
     async customerRegister(body: CreateCustomerDto) {
 
-        const { phone, img, password, name, address, status } = body
+        const { phone, img, password } = body
         const checkCustomer = await this.customreModel.findOne({ phone })
 
         if (checkCustomer) {
@@ -35,11 +35,9 @@ export class CustomersService {
                 : '';
 
             const customer = await this.customreModel.create({
-                name,
+                ...body,
                 phone,
                 img: filePath,
-                address,
-                status,
                 password: hashedPassword,
             });
 
@@ -66,8 +64,25 @@ export class CustomersService {
 
     }
 
-    async getCustomers() {
-        let customerList = await this.customreModel.find({})
+    async getCustomers(query: { page: string; limit: string; search?: string }) {
+        const page = parseInt(query.page) || 1;
+        const limit = parseInt(query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const filter = query.search
+            ? {
+                $or: [
+                    { name: { $regex: query.search, $options: 'i' } },
+                    { phone: { $regex: query.search, $options: 'i' } },
+                ],
+            }
+            : {};
+
+
+        const [customerList, total] = await Promise.all([
+            this.customreModel.find(filter).skip(skip).limit(limit),
+            this.customreModel.countDocuments(filter),
+        ]);
 
         if (!customerList) {
             throw new NotFoundException('Customer Not Found')
@@ -75,24 +90,12 @@ export class CustomersService {
 
         return {
             data: customerList,
+            count: total,
             message: 'Customer list fetched',
             success: true
         }
     }
 
-    //  async login(body:LoginDto) {
-    //     let customerList = await this.customreModel.find({})
-
-    //     if (!customerList) {
-    //         throw new NotFoundException('Customer Not Found')
-    //     }
-
-    //     return {
-    //         data: customerList,
-    //         message: 'Customer list fetched',
-    //         success: true
-    //     }
-    // }
 
 
 }

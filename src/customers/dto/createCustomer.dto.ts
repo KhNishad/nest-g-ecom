@@ -7,12 +7,14 @@ export class CreateCustomerDto {
     @IsNotEmpty()
     @MinLength(11)
     phone!: string;
-    
+
     password!: string;
 
     img!: string;
     address!: string
+    district!: string;
+    city!: string;
 
     @IsBoolean()
-    status!:boolean
+    active!: boolean
 }
