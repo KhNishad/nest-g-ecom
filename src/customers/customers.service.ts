@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import { CreateCustomerDto } from './dto/createCustomer.dto';
 import { saveBase64Image, deleteImage } from 'src/helpers/base64imageUpload';
 import * as bcrypt from 'bcrypt';
+import { UpdateCustomerDto } from './dto/updateCustomer.dto';
 
 
 @Injectable()
@@ -95,6 +96,26 @@ export class CustomersService {
             success: true
         }
     }
+
+    async updateCustomer(body: UpdateCustomerDto, id: string) {
+        console.log(id);
+
+        const customer = await this.customreModel.findOne({ _id: id })
+
+        if (!customer) {
+            throw new NotFoundException('Customer Not Found')
+        }
+
+        let updatedData = await this.customreModel.findOneAndUpdate({ _id: id }, { $set: { ...body } }, { new: true })
+
+        return {
+            message: 'Customer updated successfully',
+            data: updatedData,
+            success: true,
+        };
+    }
+
+
 
 
 

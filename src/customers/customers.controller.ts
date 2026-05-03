@@ -1,7 +1,8 @@
 import { AuthService } from './../auth/auth.service';
 import { CustomersService } from './customers.service';
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/createCustomer.dto';
+import { UpdateCustomerDto } from './dto/updateCustomer.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { LoginDto } from 'src/auth/dto/auth.dto';
 
@@ -35,6 +36,13 @@ export class CustomersController {
     otpLogin(@Body() body: { phone: string; otp: string }) {
         return this.authService.customerOtpLogin(body.phone, body.otp)
     }
+
+    @Patch('/update-self')
+    @UseGuards(AuthGuard('jwt'))
+    updateProfile(@Body() body: UpdateCustomerDto, @Req() req:any) {
+        return this.customerService.updateCustomer(body,req.user.id)
+    }
+
 
 
 
