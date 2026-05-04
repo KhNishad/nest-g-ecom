@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     async validate(payload: any) {
         // this gets attached to req.user in every protected route
         return {
-            id: payload.sub,
+            id: payload.id,
             phone: payload.phone,
             role: payload.role,
         };

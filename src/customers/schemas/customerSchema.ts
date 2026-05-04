@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 export type CustomerDocument = Customer & Document;
 
-@Schema({ versionKey: false })
+@Schema({ versionKey: false,timestamps: true })
 export class Customer {
   @Prop({ required: true , index: true})
   name!: string;

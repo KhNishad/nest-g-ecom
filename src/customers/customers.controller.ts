@@ -40,6 +40,7 @@ export class CustomersController {
     @Patch('/update-self')
     @UseGuards(AuthGuard('jwt'))
     updateProfile(@Body() body: UpdateCustomerDto, @Req() req:any) {
+        console.log(req.user)
         return this.customerService.updateCustomer(body,req.user.id)
     }
 

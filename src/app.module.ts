@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { CustomersModule } from './customers/customers.module';
+import { CategoryModule } from './category/category.module';
 
 
 @Module({
@@ -19,7 +20,7 @@ import { CustomersModule } from './customers/customers.module';
       }
       return connection;
     },
-  }), AuthModule, CustomersModule,],
+  }), AuthModule, CustomersModule, CategoryModule,CategoryModule],
   controllers: [AppController],
   providers: [AppService],
 })

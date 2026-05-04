@@ -118,14 +118,16 @@ export class AuthService {
         const customer = await this.customerModel.findOneAndUpdate(
             { phone },
             { phone },
-            { upsert: true, new: true }
+            { upsert: true, new: true, lean: true },
         );
 
-        const token = this.jwtService.sign({ id: customer._id, phone: customer.phone });
+        const token = this.jwtService.sign({
+            id: customer?._id.toString(),
+            phone: customer?.phone
+        });
 
         return {
             token,
-            isNewUser: !customer.name,
             message: 'Login successful',
             success: true,
         };

@@ -98,7 +98,6 @@ export class CustomersService {
     }
 
     async updateCustomer(body: UpdateCustomerDto, id: string) {
-        console.log(id);
 
         const customer = await this.customreModel.findOne({ _id: id })
 
@@ -106,7 +105,17 @@ export class CustomersService {
             throw new NotFoundException('Customer Not Found')
         }
 
-        let updatedData = await this.customreModel.findOneAndUpdate({ _id: id }, { $set: { ...body } }, { new: true })
+        const hashedPassword = body.password
+            ? await bcrypt.hash(body.password, 10)
+            : '';
+
+        let filePath: string | null = null;
+
+        const result = saveBase64Image(body.img, 'public/customer');
+        filePath = result.filePath;
+
+
+        let updatedData = await this.customreModel.findOneAndUpdate({ _id: id }, { $set: { ...body, password: hashedPassword, img: filePath } }, { new: true })
 
         return {
             message: 'Customer updated successfully',
