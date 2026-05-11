@@ -25,6 +25,9 @@ export class Category {
     @Prop()
     position!: number
 
+    @Prop({default: false})
+    isDeleted!:boolean
+
 
 }
 
