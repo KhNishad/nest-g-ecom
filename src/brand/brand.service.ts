@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateBrandDto } from './dto/createBrand.dto';
 import { generateSlug } from 'src/utils/slug.utlis';
-import { saveBase64Image , deleteImage } from 'src/helpers/base64imageUpload';
+import { saveBase64Image, deleteImage } from 'src/helpers/base64imageUpload';
 
 @Injectable()
 export class BrandService {
@@ -39,7 +39,7 @@ export class BrandService {
         success: true,
       };
     } catch (error) {
-         if (imageUrl) {
+      if (imageUrl) {
         try {
           await deleteImage(imageUrl);
           console.log('Image deleted on brand creation failure');
@@ -48,31 +48,36 @@ export class BrandService {
         }
       }
 
-      throw error; 
+      throw error;
     }
   }
 
-  async getBrandList(query:{page:number,limit:number,search:string}){
-    const page = query.page || 1
-    const limit  = query.limit || 10
-    const skip = (page-1)*limit
+  async getBrandList(query: { page: number; limit: number; search: string }) {
+    const page = query.page || 1;
+    const limit = query.limit || 10;
+    const skip = (page - 1) * limit;
 
-    const filter = query.search?{
-      $or:[{
-        name:{$regex:query.search,$options:'i'}
-      },{slug:{$regex:query.search,$options:'i'}},
-      {isDeleted:false}
-    ]}:{}
+    const filter = query.search
+      ? {
+          $or: [
+            {
+              name: { $regex: query.search, $options: 'i' },
+            },
+            { slug: { $regex: query.search, $options: 'i' } },
+            { isDeleted: false },
+          ],
+        }
+      : {};
 
-    const [brandList,total] = await Promise.all([
+    const [brandList, total] = await Promise.all([
       this.brandModel.find(filter).skip(skip).limit(limit),
-      this.brandModel.countDocuments(filter)
-    ])
+      this.brandModel.countDocuments(filter),
+    ]);
     return {
-      message:"Brand List",
-      data:brandList,
-      success:true,
+      message: 'Brand List',
+      data: brandList,
+      success: true,
       total,
-    }
+    };
   }
 }
