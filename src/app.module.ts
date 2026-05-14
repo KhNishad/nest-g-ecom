@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { CustomersModule } from './customers/customers.module';
 import { CategoryModule } from './category/category.module';
+import { BrandModule } from './brand/brand.module';
 
 
 @Module({
@@ -20,7 +21,7 @@ import { CategoryModule } from './category/category.module';
       }
       return connection;
     },
-  }), AuthModule, CustomersModule, CategoryModule,CategoryModule],
+  }), AuthModule, CustomersModule, CategoryModule,CategoryModule, BrandModule],
   controllers: [AppController],
   providers: [AppService],
 })

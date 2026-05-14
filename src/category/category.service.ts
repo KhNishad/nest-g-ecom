@@ -123,9 +123,18 @@ export class CategoryService {
         throw new ConflictException(`Category "${body.name}" already exists`);
       }
     }
+
+    let imageUrl: string = '';
+    if (body.image.startsWith('/public')) {
+      imageUrl = body.image;
+    } else {
+      const result = saveBase64Image(body.image, 'public/category');
+      imageUrl = result.filePath;
+    }
+
     const updateCategory = await this.categoryModel.findByIdAndUpdate(
       { _id: id },
-      { ...body, slug },
+      { ...body, slug, image: imageUrl },
       { new: true },
     );
     return {
